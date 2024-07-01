@@ -14,15 +14,20 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   List<Plant> plants = [Plant(name: 'Daisy')];
   late Timer _timer;
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
     _loadPlants();
     _startTimer();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
   }
 
   void _startTimer() {
@@ -43,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _timer.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -98,15 +104,35 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: plants.length,
         itemBuilder: (context, index) {
           final plant = plants[index];
-          return ListTile(
-            title: Text(plant.name),
-            subtitle: Text('Water Level: ${plant.waterLevel}%'),
-            trailing: plant.isAlive
-                ? IconButton(
-                    icon: Icon(Icons.local_drink),
-                    onPressed: () => _waterPlant(plant),
-                  )
-                : Text('Dead', style: TextStyle(color: Colors.red)),
+          return AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return ListTile(
+                title: Text(plant.name),
+                subtitle: Text('Water Level: ${plant.waterLevel}%'),
+                trailing: plant.isAlive
+                    ? GestureDetector(
+                        onTap: () => _waterPlant(plant),
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                          width: plant.isAlive ? 40 : 20,
+                          height: plant.isAlive ? 40 : 20,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _controller.status == AnimationStatus.forward
+                                ? Colors.green
+                                : Colors.blue,
+                          ),
+                          child: Icon(
+                            Icons.local_drink,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : Text('Dead', style: TextStyle(color: Colors.red)),
+              );
+            },
           );
         },
       ),

@@ -20,6 +20,7 @@ dependencies:
   riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
   shared_preferences: ^2.2.3
+  intl: ^0.17.0
   sqflite: ^2.0.0+4  # Новая зависимость
   path: ^1.8.0  # Новая зависимость
 

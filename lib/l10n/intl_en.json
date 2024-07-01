@@ -1,6 +1,13 @@
 {
-    "title": "Login",
-    "username": "Username",
-    "password": "Password",
-    "login": "Login"
-}
+    "appTitle": "PlantNanny",
+    "registration": "Registration",
+    "height": "Height (cm)",
+    "weight": "Weight (kg)",
+    "age": "Age",
+    "cupSize": "Cup Size (ml)",
+    "register": "Register",
+    "login": "Login",
+    "waterLevel": "Water Level: ",
+    "dead": "Dead"
+  }
+  
